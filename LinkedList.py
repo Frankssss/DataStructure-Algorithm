@@ -16,7 +16,7 @@ class LinkedList(object):
     def __init__(self, maxsize=None):
         self.maxsize = maxsize
         self.root = Node()
-        self._rear = None
+        self._tail = None
         self.length = 0
 
     def __len__(self):
@@ -28,12 +28,12 @@ class LinkedList(object):
     def append(self, elem):
         if self.maxsize is not None and len(self) >= self.maxsize:
             raise Exception('Full')
-        if self._rear is None:
+        if self._tail is None:
             self.root.next_ = Node(elem)
-            self._rear = self.root.next_
+            self._tail = self.root.next_
         else:
-            self._rear.next_ = Node(elem)
-            self._rear = self._rear.next_
+            self._tail.next_ = Node(elem)
+            self._tail = self._tail.next_
         self.length += 1
 
     def prepend(self, elem):
@@ -78,8 +78,8 @@ class LinkedList(object):
         for p in self._iter_node():
             if p.elem == elem:
                 prev.next_ = p.next_
-                if p is self._rear:
-                    self._rear = prev
+                if p is self._tail:
+                    self._tail = prev
                 del p
                 self.length -= 1
                 return elem
@@ -90,17 +90,17 @@ class LinkedList(object):
         for p in self._iter_node():
             del p
         self.root.next_ = None
-        self._rear = None
+        self._tail = None
         self.length = 0
 
 
 def test_linked_list():
 
     l = LinkedList(4)
-    l.append(0)
     l.append(1)
     l.append(2)
     l.append(3)
+    l.prepend(0)
     assert len(l) == 4
     assert l.find(3) == 3
     assert l.find(2) == 2
@@ -109,7 +109,6 @@ def test_linked_list():
     assert len(l) == 3
     assert l.find(0) == -1
     assert l.remove(2) == 2
-    l.remove(0)
     l.remove(2)
     assert [i for i in l] == [1, 3]
     assert l.find(3) == 1

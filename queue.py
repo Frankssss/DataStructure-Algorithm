@@ -5,6 +5,7 @@ queue (FIFO)
 push pop
 '''
 
+
 class Node(object):
     def __init__(self, value=None, next=None):
         self.value = value

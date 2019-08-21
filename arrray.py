@@ -29,6 +29,10 @@ def test_array():
     size = 10
     a = Array(size)
     a[0] = 1
+    a[1] = 2
+    a[2] = 3
+    assert len(a) == 10
+    assert [i for i in a if i is not None] == [1, 2, 3]
     assert a[0] == 1
     a.clear()
     assert a[0] is None

@@ -1,7 +1,7 @@
 __author__ = "Frank Shen"
 
 '''
-LList
+LinkedList
 prepend append popLeft remove find len 
 '''
 
@@ -90,8 +90,6 @@ class LinkedList(object):
         return None
 
     def clear(self):
-        for node in self._iter_node():
-            node = None
         self.root.next = None
         self._tail = self.root.next
         self.length = 0
@@ -99,40 +97,40 @@ class LinkedList(object):
 
 def test_linked_list():
 
-    l = LinkedList(4)
-    l.append(1)
-    l.append(2)
-    l.append(3)
-    l.prepend(0)
-    assert len(l) == 4
-    assert l.find(3) == 3
-    assert l.find(2) == 2
-    l.pop_left()
-    assert [i for i in l] == [1, 2, 3]
-    assert len(l) == 3
-    assert l.find(0) == -1
-    assert l.remove(2) == 2
-    l.remove(2)
-    assert [i for i in l] == [1, 3]
-    assert l.find(3) == 1
-    l.clear()
-    assert len(l) == 0
-    assert l.is_empty() is True
-    l.append(1)
-    l.append(2)
-    l.append(3)
-    l.prepend(0)
-    assert len(l) == 4
-    assert l.find(3) == 3
-    assert l.find(2) == 2
-    l.pop_left()
-    assert [i for i in l] == [1, 2, 3]
-    assert len(l) == 3
-    assert l.find(0) == -1
-    assert l.remove(2) == 2
-    l.remove(2)
-    assert [i for i in l] == [1, 3]
-    assert l.find(3) == 1
+    ll = LinkedList(4)
+    ll.append(1)
+    ll.append(2)
+    ll.append(3)
+    ll.prepend(0)
+    assert len(ll) == 4
+    assert ll.find(3) == 3
+    assert ll.find(2) == 2
+    ll.pop_left()
+    assert [i for i in ll] == [1, 2, 3]
+    assert len(ll) == 3
+    assert ll.find(0) == -1
+    assert ll.remove(2) == 2
+    ll.remove(2)
+    assert [i for i in ll] == [1, 3]
+    assert ll.find(3) == 1
+    ll.clear()
+    assert len(ll) == 0
+    assert ll.is_empty() is True
+    ll.append(1)
+    ll.append(2)
+    ll.append(3)
+    ll.prepend(0)
+    assert len(ll) == 4
+    assert ll.find(3) == 3
+    assert ll.find(2) == 2
+    ll.pop_left()
+    assert [i for i in ll] == [1, 2, 3]
+    assert len(ll) == 3
+    assert ll.find(0) == -1
+    assert ll.remove(2) == 2
+    ll.remove(2)
+    assert [i for i in ll] == [1, 3]
+    assert ll.find(3) == 1
 
 
 test_linked_list()

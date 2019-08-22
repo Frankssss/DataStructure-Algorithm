@@ -2,9 +2,9 @@ __author__ = "Frank Shen"
 
 
 class Node(object):
-    def __init__(self, value=None, next=None, prev=None):
-        self.value = value
-        self.next = next
+    def __init__(self, elem=None, next_=None, prev=None):
+        self.elem = elem
+        self.next = next_
         self.prev = prev
 
 
@@ -19,29 +19,30 @@ class CircularDoubleLinkedList(object):
     def __len__(self):
         return self.length
 
-    def tailNode(self):
+    def _tail(self):
         return self.root.prev
 
-    def headNode(self):
+    def _head(self):
         return self.root.next
 
-    def append(self, value):
+    def append(self, elem):
         if self.maxsize is not None and len(self) > self.maxsize:
             raise Exception('Full')
-        node = Node(value=value)
-        tailNode = self.tailNode()
-
-        tailNode.next = node
-        node.prev = tailNode
+        node = Node(elem)
+        tail = self._tail()
+        tail.next = node
+        node.prev = tail
 
         self.root.prev = node
         node.next = self.root
         self.length += 1
 
-    def appendLeft(self, value):
+        # tail.next = Node(value, self.root, self.tail)
+
+    def prepend(self, elem):
         if self.maxsize is not None and len(self) > self.maxsize:
             raise Exception('Full')
-        node = Node(value=value)
+        node = Node(elem)
 
         if self.root.next is self.root:
             node.next = self.root
@@ -49,11 +50,11 @@ class CircularDoubleLinkedList(object):
             self.root.next = node
             self.root.prev = node
         else:
-            headNode = self.headNode()
+            head = self._head()
             node.prev = self.root
             self.root.next = node
-            node.next = headNode
-            headNode.prev = node
+            node.next = head
+            head.prev = node
         self.length += 1
 
     def remove(self, node):  # O(1)  node
@@ -65,39 +66,40 @@ class CircularDoubleLinkedList(object):
         self.length -= 1
         return node
 
-    def iterNode(self):
+    def _iter_node(self):
         if self.root.next is self.root:
             return
-        curNode = self.root.next
-        while curNode.next is not self.root:
-            yield curNode
-            curNode = curNode.next
-        yield curNode
+        p = self.root.next
+        while p.next is not self.root:
+            yield p
+            p = p.next
+        yield p
 
     def __iter__(self):
-        for node in self.iterNode():
-            yield node.value
+        for node in self._iter_node():
+            yield node.elem
 
     def iter_node_reverse(self):
         if self.root.prev is self.root:
             return
-        curNode = self.root.prev
-        while curNode.next is not self.root:
-            yield curNode
-            curNode = curNode.prev
-        yield curNode
+        p = self.root.prev
+        while p.next is not self.root:
+            yield p
+            p = p.prev
+        yield p
 
 
 def test_double_linked_list():
     a = CircularDoubleLinkedList()
-    a.append(0)
     a.append(1)
     a.append(2)
     a.append(3)
-    a.appendLeft(5)
+    a.prepend(0)
     print(len(a))
-    for node in a:
-        print(node)
+    for elem in a:
+        print(elem)
+    for node in a.iter_node_reverse():
+        print(node.elem)
 
 
 test_double_linked_list()

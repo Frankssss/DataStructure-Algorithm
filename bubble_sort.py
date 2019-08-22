@@ -1,6 +1,7 @@
 __author__ = "Frank Shen"
 
 
+# 冒泡排序
 def bubble_sort(seq):
     n = len(seq)
     for i in range(n-1):
@@ -12,9 +13,10 @@ def bubble_sort(seq):
 def test_bubble_sort():
     import random
     seq = list(range(10))
-    random.shuffle(seq)
-    bubble_sort(seq)
-    print(seq)
+    for i in range(10):
+        random.shuffle(seq)
+        bubble_sort(seq)
+        assert seq == list(range(10))
 
 
 test_bubble_sort()

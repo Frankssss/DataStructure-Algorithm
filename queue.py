@@ -7,90 +7,91 @@ push pop
 
 
 class Node(object):
-    def __init__(self, value=None, next=None):
-        self.value = value
-        self.next = next
+    def __init__(self, elem=None, next_=None):
+        self.elem = elem
+        self.next = next_
 
 
 class LinkedList(object):
     def __init__(self, maxsize=None):
         self.maxsize = maxsize
-        self.length = 0
         self.root = Node()
-        self.tailNode = None
+        self.length = 0
+        self._tail = None
 
     def __len__(self):
         return self.length
 
-    def append(self, value):
+    def is_empty(self):
+        return self._tail is None
+
+    def append(self, elem):
         if self.maxsize is not None and len(self) > self.maxsize:
             raise Exception('Full')
-        node = Node(value=value)
-        tailNode = self.tailNode
-        if tailNode is None:
-            self.root.next = node
+        if self._tail is None:
+            self.root.next = Node(elem)
+            self._tail = self.root.next
         else:
-            self.tailNode.next = node
-        self.tailNode = node
+            self._tail.next = Node(elem)
+            self._tail = self._tail.next
         self.length += 1
 
-    def appendLeft(self, value):
+    def prepend(self, elem):
         if self.maxsize is not None and len(self) > self.maxsize:
             raise Exception('Full')
-        node = Node(value=value)
-        headNode = self.root.next
-        self.root.next = node
-        node.next = headNode.next
+        head = self.root.next
+        if self._tail is None:
+            self.root.next = Node(elem, head)
+            self._tail = self.root.next
+        else:
+            self.root.next = Node(elem, head)
         self.length += 1
 
-    def iterNode(self):
-        curNode = self.root.next
-        while curNode is not self.tailNode:
-            yield curNode
-            curNode = curNode.next
-        if curNode is not None:
-            yield curNode
+    def _iter_node(self):
+        node = self.root.next
+        while node is not None:
+            yield node
+            node = node.next
 
     def __iter__(self):
-        for node in self.iterNode():
-            yield node.value
+        for node in self._iter_node():
+            yield node.elem
 
-    def remove(self, value):  # O(n)
-        prevNode = self.root
-        for curNode in self.iterNode():
-            if curNode.value == value:
-                prevNode.next = curNode.next
-                if curNode is self.tailNode:
-                    self.tailNode = prevNode
-                del curNode
-                self.length -= 1
-                return 1
-            prevNode = curNode
-        return -1
-
-    def find(self, value):
+    def find(self, elem):
         index = 0
-        for node in self.iterNode():
-            if node.value == value:
+        for node in self._iter_node():
+            if node.elem == elem:
                 return index
             index += 1
         return -1
 
-    def popleft(self):
-        if self.tailNode is None:
+    def pop_left(self):
+        if self._tail is None:
             raise Exception('Empty')
-        headNode = self.root.next
-        self.root.next = headNode.next
+        head = self.root.next
+        if self.root.next is self._tail:
+            self.root.next = head.next
+            self._tail = self.root.next
+        else:
+            self.root.next = head.next
         self.length -= 1
-        value = headNode.value
-        del headNode
-        return value
+        return head.elem
+
+    def remove(self, elem):
+        prev = self.root
+        for node in self._iter_node():
+            if node.elem == elem:
+                prev.next = node.next
+                if node is self._tail:
+                    self._tail = prev
+                self.length -= 1
+                return node.elem
+            prev = node
+        return None
 
     def clear(self):
-        for node in self.iterNode():
-            del node
         self.root.next = None
-        self.tailNode = None
+        self._tail = self.root.next
         self.length = 0
 
 
@@ -110,7 +111,7 @@ class Queue(object):
     def pop(self):
         if len(self) <= 0:
             raise Exception('Empty')
-        return self._item_linked_list.popleft()
+        return self._item_linked_list.pop_left()
 
 
 def test_queue():
